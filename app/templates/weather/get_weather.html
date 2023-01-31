@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+  {{ title }}
+{% endblock title %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Show weather info</h1>
+</div>
+
+<div class="col-md-4">
+    <form action="{{ url_for('weather.index') }}" method="POST">
+        {{ form.csrf_token }}
+        {{ wtf.form_field(form.city_name) }}
+        {{ wtf.form_field(form.submit) }}
+    </form>
+
+    {% if city_weather %}
+    <div class="table-responsive">
+        <h3>Weather info about city {{ city_name.capitalize() }}, {{ country.name }}</h3>
+        <table class="table table-hover table-striped" id="userTable">
+            <thead>
+                <tr>
+                    <th scope="col">Field</th>
+                    <th scope="col">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for field, value in city_weather.items() %}
+                <tr>
+                    <td>{{ field.capitalize() }}</td>
+                    {% if field == 'icon_url' %}
+                    <td class="bg-info"><img src="{{ value }}" alt=""></td>
+                    {% else %}
+                    <td>{{ value }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+</div>
+</div>
+{% endif %}
+
+{% endblock page_content %}
